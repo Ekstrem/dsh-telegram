@@ -1,0 +1,48 @@
+name: Publish to npm
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # npm provenance attestation
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      # The package ships hand-maintained ESM with no build step, so a syntax
+      # check is the only gate available before the registry accepts it.
+      # Copied to .mjs because `--check` reads ESM by extension, not by flag.
+      - name: Check syntax
+        run: |
+          set -e
+          for file in lib/*.js; do
+            tmp="${RUNNER_TEMP}/$(basename "$file").mjs"
+            cp "$file" "$tmp"
+            node --check "$tmp" || { echo "syntax error: $file"; exit 1; }
+          done
+
+      - name: Tag must match package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag="${GITHUB_REF#refs/tags/v}"
+          version="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$version" ]; then
+            echo "tag v$tag does not match package.json version $version"
+            exit 1
+          fi
+
+      - name: Publish
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
