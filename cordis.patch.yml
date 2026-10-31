@@ -17,7 +17,7 @@
 
 - insert:
     - id: telegram
-      name: dsh-telegram
+      name: dsh-telegram-ex
       # Startup-critical services only. `ctx.get()` returns undefined while a
       # providing fiber is still inactive, so anything read during boot — above
       # all `credentials`, which holds the bot token — must be declared here.

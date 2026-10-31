@@ -1,5 +1,5 @@
 {
-  "name": "dsh-telegram",
+  "name": "dsh-telegram-ex",
   "version": "0.3.0",
   "description": "Telegram channel for DeepSeek Harness with a Russian interface, workspace-grouped session switching and a last-answer command",
   "keywords": [
