@@ -1,0 +1,41 @@
+# DSH bundle patch — dsh-telegram
+#
+# Mounts a Telegram channel that renders Telegram HTML correctly, uploads real
+# media, asks questions through inline keyboards, and exposes model/preset/
+# sandbox control as chat commands.
+#
+# COEXISTENCE: only one process may long-poll a given bot token. If a profile
+# also mounts `@wsz987/dsh-channels`, disable its Telegram half in the PROFILE
+# patch layer, which is evaluated after every bundle:
+#
+#     - id: channels-telegram
+#       disabled: true
+#
+# That row is deliberately not disabled from here. A patch targeting a row no
+# other bundle contributed warns at boot ("entry not found"), so a bundle must
+# not assume another bundle is present.
+
+- insert:
+    - id: telegram
+      name: dsh-telegram
+      # Startup-critical services only. `ctx.get()` returns undefined while a
+      # providing fiber is still inactive, so anything read during boot — above
+      # all `credentials`, which holds the bot token — must be declared here.
+      # Services used only inside commands (agentPresets, compaction,
+      # sandboxPolicy, sessionPersistence) are resolved lazily instead, so a
+      # composition without one loses that command, not the channel.
+      inject:
+        - agents
+        - llm
+        - credentials
+        - userQuestions
+        - agentDefaultModel
+        - attachments
+        - workspaceRegistry
+      config:
+        enabled: true
+        tokenRef: TELEGRAM_BOT_TOKEN
+        streaming: true
+        showToolActivity: true
+        # Restrict the bot to specific Telegram user ids; empty allows everyone.
+        allowedUsers: []
