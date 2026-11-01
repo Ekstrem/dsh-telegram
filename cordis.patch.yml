@@ -37,5 +37,15 @@
         tokenRef: TELEGRAM_BOT_TOKEN
         streaming: true
         showToolActivity: true
+        # Зеркалить в чат/топик все ответы привязанной сессии, а не только ходы,
+        # начатые из Telegram: так видно работу ролей, которую запускает мост
+        # LoopMaker или веб-интерфейс.
+        mirrorAnswers: true
+        # Закрытые сессии не поднимаем сами: поднятый из плагина агент теряет
+        # инструменты. Сообщение ждёт открытия сессии и уходит само.
+        wake: live-only
+        pendingTtlHours: 6
+        # Новые телеграм-сессии работают в этой папке, а не в папке профиля.
+        workspaceRoot: 'C:\Users\About\Documents\GitHub'
         # Restrict the bot to specific Telegram user ids; empty allows everyone.
         allowedUsers: []
