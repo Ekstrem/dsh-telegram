@@ -50,5 +50,9 @@
         # Автообновление топиков: раз в 10 минут досоздавать топики для новых
         # сессий и переименовывать те, чей заголовок изменился.
         autoTopicsMinutes: 10
+        # Личный топик «Персональные сообщения» (/ex): написанное там падает
+        # строкой в этот файл, а мост LoopMaker доставляет её ролям.
+        userOutboxFile: 'C:\Users\About\Documents\GitHub\XDiary\5-tech-backlog\chat\ex.md'
+        userOutboxTo: TL
         # Restrict the bot to specific Telegram user ids; empty allows everyone.
         allowedUsers: []
