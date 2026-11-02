@@ -47,5 +47,8 @@
         pendingTtlHours: 6
         # Новые телеграм-сессии работают в этой папке, а не в папке профиля.
         workspaceRoot: 'C:\Users\About\Documents\GitHub'
+        # Автообновление топиков: раз в 10 минут досоздавать топики для новых
+        # сессий и переименовывать те, чей заголовок изменился.
+        autoTopicsMinutes: 10
         # Restrict the bot to specific Telegram user ids; empty allows everyone.
         allowedUsers: []
